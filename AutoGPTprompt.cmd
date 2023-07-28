@@ -1,0 +1,2 @@
+python .\AutoGPTprompt.py
+pause

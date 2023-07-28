@@ -1,0 +1,58 @@
+batchSize: 1
+cfgScale: 15
+steps: 60
+highresSteps: 40
+denoisingStrength: 0.5
+positivePrompt: ", <lora:ArtDecoAI:0.4>, (masterpiece:1.2, best quality:1.2, high quality, highres:1.1, aesthetic), extremely detailed, ambient lighting"
+negativePrompt: "(low quality, worst quality:1.3, monochrome:1.1), (EasyNegative, bad-hands-5:0.8, bad_prompt_version2:0.8, verybadimagenegative_v1.3, aid291)"
+
+contextRules: |
+  CONTEXT INSTRUCTIONS
+
+  From the first to the last paragraph, divide this text by logical sets of paragraphs and for each of these sets specify a place (without using a proper name), a single time of day (morning, noon, evening, night) and the characters (use their roles or visual caracteristics, not their proper name). If the location, characters or time of day does not change explicitly, keep it strictly the same. If they are not defined at all, invent. Write in english.
+  Each of these set will be a local context information for an image generation software. Keep in mind that the software will be totally unaware of the previous sets. Therefore, never use the word "same". And focus on visual input.
+  If a part of a text is a dialog, describe the subject of the dialog rather than the dialog scene itself. For example, if a dialog says "I saw a dragon", depict the dragon and not the people saying this.
+  NEVER use a proper name.
+
+  Use this CSV format:
+
+  beginning;end;location;timeOfDay;characters
+  1;2;A living room with white furniture;Evening;An old woman with wrinkles and a brown skin
+  3;3;A living room with white furniture;Night;Two merchants wearing green clothes and a tall thief with a hood
+  4;6;A pond with wild grass and animals;Night;Two merchants wearing green clothes and a tall thief with a hood
+
+stableDiffusionRules: |
+   Stable Diffusion est un outil de génération d'images. Voici ses règles.
+
+   REGLES DE STABLE DIFFUSION
+
+   Stable diffusion fonctionne avec des prompts.
+
+   Syntaxe : Utilisez uniquement des mots et des virgules. Les virgules séparent les sujets. N'utilisez pas des phrases complètes ni de points.
+   Sujets : Les sujets d'un prompt doivent absolument être visuels.
+   Ordre des sujets : Les sujets les plus importants sont placés en premier. Le premier sujet, jusqu'à la première virgule,  est particulièrement important. Il doit absolument donner une idée générale de la scène.
+   Vocabulaire : Utilisez des mots simples et courants
+   Poids : L'importance d'un mot peut être augmentée ou diminuée selon la syntaxe suivante (mot). Le poids doit principalement être utilisé pour renforcer des objets ou des actions inhabituelles, afin qu'ils soient mieux représentés.
+   Limite de taille : l'invite ne doit pas dépasser 50 mots
+   Caractéristiques d'une bonne invite : claire, concise, créative, originale
+   Noms propres : N'utilisez JAMAIS de noms propres de personnes ou de lieux.
+   Conversation : si le texte fait partie d'une conversation, représente le sujet de la conversation plutôt que la conversation elle-même.
+
+finalInstruction:
+   FINAL INSTRUCTION
+
+   Sur la base des règles ci-dessus, vous devez transformer le paragraphe ci-dessus en un prompt de diffusion stable en anglais.
+   Assurez-vous d'écrire le prompt ET RIEN D'AUTRE.
+
+samplePrompts: |
+  Exemples de prompts
+
+  chubby (adult welsh) woman, coral eyes, gray quiff hair looking down, solo, upper body, detailed background, detailed face, warm smile, dynamic pose, shop owner, green simple merchant clothes, pouches, belts, busy (medieval market stall), selling wide variety of flowers, lavenders, roses, tulips, lilies
+
+  panorama view in a dark underground cavern rich in (huge colorful crystal deposits), colorful crystals, vibrant and vivid, smooth, crystals, gems, geode, darkness, minereal deposits
+
+  (man, old namibian male), fat, turquoise eyes, auburn hair, taper fade bloody scars, looking up, solo, half shot, detailed background, Memphis, ancient egyptian theme, smirking, assassins creed, initiate assassin, white leather assassin clothes, hood, cloak, small knives, straps, undercover, dynamic pose, running, battle scene in background, dirt, sunshine
+
+  inconceivable and spectacular scene of complete madness, (cosmic entities), celestial, elegant, ornate, vibrant and vivid, heavenly, cosmic flower, (nebula vines), symbolism, magical
+
+  (wrinkled face, mature, old german), woman, muscular, silver eyes, gray hair, short hair, portrait, looking at viewer, solo, upper body, detailed background, determined expression, dynamic pose, dim lighting engineer, floating gears, brown leather vest with gears, techwear, goggles, dark cave in background, machines, gears, industry, furnace, grime, gauges, clockwork, electricity, flames intense atmosphere

@@ -1,0 +1,12 @@
+syntax = "proto3";
+option csharp_namespace = "GrpcClient";
+package gptservice;
+service GPTService {
+    rpc ProcessText(ProcessRequest) returns (ProcessReply);
+}
+message ProcessRequest {
+    string text = 1;
+}
+message ProcessReply {
+    string result = 1;
+}
