@@ -10,6 +10,10 @@ Passwords.yaml
 .png
 .jpeg
 
+#Ignore folders
+output/
+output_gallery/
+
 # User-specific files
 *.rsuser
 *.suo
