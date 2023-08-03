@@ -1,9 +1,9 @@
 batchSize: 1
 cfgScale: 15
 steps: 60
-highresSteps: 40
+highresSteps: 30
 denoisingStrength: 0.5
-positivePrompt: ", <lora:ArtDecoAI:0.4>, (masterpiece:1.2, best quality:1.2, high quality, highres:1.1, aesthetic), extremely detailed, ambient lighting"
+positivePrompt: ", (masterpiece:1.2, best quality:1.2, high quality, highres:1.1), extremely detailed, ambient lighting"
 negativePrompt: "(low quality, worst quality:1.3, monochrome:1.1), (EasyNegative, bad-hands-5:0.8, bad_prompt_version2:0.8, verybadimagenegative_v1.3, aid291)"
 
 contextRules: |

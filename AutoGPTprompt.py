@@ -1,3 +1,5 @@
+import argparse
+
 import openai
 import os
 import time
@@ -9,12 +11,22 @@ import grpc
 from concurrent import futures
 import gpt_service_pb2
 import gpt_service_pb2_grpc
+import chardet
 
 # IMPORT CONFIG
 with open('config.yaml', 'r', encoding='utf-8') as file:
     try:
         config = yaml.safe_load(file)
         locals().update(config)
+    except yaml.YAMLError as err:
+        print(err)
+
+        
+# IMPORT PASSWORDS
+with open('passwords.yaml', 'r', encoding='utf-8') as file:
+    try:
+        passwords = yaml.safe_load(file)
+        locals().update(passwords)
     except yaml.YAMLError as err:
         print(err)
 
@@ -27,7 +39,7 @@ class Context:
         self.df = pd.DataFrame()
 
 # Set API key
-openai.api_key = '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'
+openai.api_key = chatGPTKey
 
 # Variables
 max_retries = 3
@@ -35,19 +47,6 @@ start_paragraph = 0
 genericContext = ""
 df = pd.DataFrame()
 context_path = ".\\output\\0_context.csv"
-
-print('Reading file...')
-# Read input file
-with open('.\\input.txt', 'r', encoding='utf-8') as f:
-    text = f.read()
-
-# Split the text into inputs and filter out empty ones
-inputs = [p for p in text.split('\n') if p.strip()]
-context = Context(inputs, "", True, "")
-
-#Panda dataset config
-pd.set_option('display.max_colwidth', None)
-pd.set_option('display.width', None)
 
 #GRPC SERVER
 class GPTServiceServicer(gpt_service_pb2_grpc.GPTServiceServicer):
@@ -90,12 +89,9 @@ def main():
             f.write(textWithNumbers)
 
         print(f'Split text into {len(inputs)} inputs.')
-        main_menu(context)
+        main_menu(context, textWithNumbers)
 
-if __name__ == '__main__':
-    main()
-
-
+#ADDITIONAL FUNCTIONS
 def add_paragraph_numbers(text):
     paragraphs = text.split('\n')
     numbered_paragraphs = []
@@ -124,7 +120,13 @@ def divide_text(text, max_token):
 
     return divided_text
 
-def main_menu(context):
+def detect_encoding(file_path):
+    with open(file_path, 'rb') as f:
+        result = chardet.detect(f.read())
+    return result['encoding']
+
+#MAIN FUNCTIONS
+def main_menu(context, textWithNumbers):
     def start_processing(context):
         if (context.genericContext != ""):
             print("The generic context is:")
@@ -178,7 +180,7 @@ def main_menu(context):
                     builtLocalContext = "Place: " + pickedLocalContext['Place'].values[0] + "\\nTime of day: " + pickedLocalContext['Time'].values[0] + "\\nCharacters: " + pickedLocalContext['Characters'].values[0]
                 else:
                     builtLocalContext = ""
-                    with open(f'output/0_context.csv', 'w') as output_file:
+                    with open(f'output/0_context.csv', 'w', encoding='utf-8-sig') as output_file:
                         output_file.write("")
                 while retries < max_retries:
                     try:
@@ -195,11 +197,11 @@ def main_menu(context):
                         # Wait for 2 seconds before trying again
                         time.sleep(2)
                 # Write response to a unique text file
-                with open(f'{output_dir}/{i + 1}_prompt.txt', 'w') as output_file:
+                with open(f'{output_dir}/{i + 1}_prompt.txt', 'w', encoding='utf-8-sig') as output_file:
                     print(response.choices[0].message.content)
                     output_file.write(response.choices[0].message.content.strip('\"'))
                     print(f'Response for paragraph {i + 1} written to file.')
-                with open(f'{output_dir}/{i + 1}_paragraphe.txt', 'w') as output_file:
+                with open(f'{output_dir}/{i + 1}_paragraphe.txt', 'w', encoding='utf-8-sig') as output_file:
                     output_file.write(paragraph)
 
         print('All inputs processed.')
@@ -313,3 +315,19 @@ def main_menu(context):
             result = menu_options[choix](context)
         else:
             print("Option inconnue. Veuillez essayer à nouveau.")
+
+if __name__ == '__main__':
+    print('Reading file...')
+    # Read input file
+    input_encoding = detect_encoding('.\\input.txt')
+    with open('.\\input.txt', 'r', encoding=input_encoding) as f:
+        text = f.read()
+
+    # Split the text into inputs and filter out empty ones
+    inputs = [p for p in text.split('\n') if p.strip()]
+    context = Context(inputs, "", True, "")
+
+    #Panda dataset config
+    pd.set_option('display.max_colwidth', None)
+    pd.set_option('display.width', None)
+    main()

@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#Ignore password file
+Passwords.yaml
+
+#Ignore pictures
+.png
+.jpeg
+
 # User-specific files
 *.rsuser
 *.suo
